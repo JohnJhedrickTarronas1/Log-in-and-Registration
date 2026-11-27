@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #EFF7F4;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .auth-card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(13, 138, 114, 0.06);
+            padding: 40px 36px;
+            width: 100%;
+            max-width: 480px;
+        }
+        .brand-title {
+            color: #0D8A72;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 22px;
+        }
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+        .role-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .role-option input[type="radio"] {
+            display: none;
+        }
+        .role-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 14px;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #374151;
+            transition: all 0.2s ease;
+        }
+        .role-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1.5px solid #9CA3AF;
+            display: inline-block;
+            position: relative;
+        }
+        .role-option input[type="radio"]:checked + .role-box {
+            border-color: #0D8A72;
+            background-color: #F2FBF8;
+            color: #0D8A72;
+        }
+        .role-option input[type="radio"]:checked + .role-box .role-dot {
+            border-color: #0D8A72;
+        }
+        .role-option input[type="radio"]:checked + .role-box .role-dot::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #0D8A72;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .form-control {
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.92rem;
+            color: #111827;
+        }
+        .form-control:focus {
+            border-color: #0D8A72;
+            box-shadow: 0 0 0 3px rgba(13, 138, 114, 0.12);
+        }
+        .password-wrapper {
+            position: relative;
+        }
+        .password-wrapper .form-control {
+            padding-right: 60px;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #0D8A72;
+            font-size: 0.82rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .helper-text {
+            font-size: 0.78rem;
+            color: #6B7280;
+            margin-top: 5px;
+        }
+        .teal-link {
+            color: #0D8A72;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .teal-link:hover {
+            text-decoration: underline;
+            color: #0A6E5B;
+        }
+        .btn-teal {
+            background-color: #0D8A72;
+            color: #FFFFFF;
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 11px;
+            border: none;
+            width: 100%;
+            font-size: 0.95rem;
+            transition: background-color 0.2s ease;
+        }
+        .btn-teal:hover {
+            background-color: #0A6E5B;
+            color: #FFFFFF;
+        }
+        .form-check-input:checked {
+            background-color: #0D8A72;
+            border-color: #0D8A72;
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-card">
+    <h1 class="brand-title">Register</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags|default:'danger' }} py-2 px-3 small" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if form.errors %}
+        <div class="alert alert-danger py-2 px-3 small">
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="POST" novalidate>
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">Account type</label>
+            <div class="role-grid">
+                <label class="role-option">
+                    <input type="radio" name="account_type" value="freelancer"
+                           {% if form.account_type.value != 'client' %}checked{% endif %}>
+                    <span class="role-box">
+                        <span class="role-dot"></span> Freelancer
+                    </span>
+                </label>
+                <label class="role-option">
+                    <input type="radio" name="account_type" value="client"
+                           {% if form.account_type.value == 'client' %}checked{% endif %}>
+                    <span class="role-box">
+                        <span class="role-dot"></span> Client
+                    </span>
+                </label>
+            </div>
+        </div>
+
+        <div class="row g-2 mb-3">
+            <div class="col-6">
+                <label for="id_first_name" class="form-label">First name</label>
+                <input type="text" name="first_name" id="id_first_name" class="form-control"
+                       placeholder="First name" value="{{ form.first_name.value|default:'' }}" required>
+            </div>
+            <div class="col-6">
+                <label for="id_last_name" class="form-label">Last name</label>
+                <input type="text" name="last_name" id="id_last_name" class="form-control"
+                       placeholder="Last name" value="{{ form.last_name.value|default:'' }}" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_email" class="form-label">Email address</label>
+            <input type="email" name="email" id="id_email" class="form-control"
+                   placeholder="you@example.com" value="{{ form.email.value|default:'' }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_password" class="form-label">Password</label>
+            <div class="password-wrapper">
+                <input type="password" name="password" id="id_password" class="form-control"
+                       placeholder="Create a password" minlength="8" required>
+                <button type="button" class="toggle-password" onclick="togglePassword('id_password', this)">Show</button>
+            </div>
+            <div class="helper-text">At least 8 characters</div>
+        </div>
+
+        <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" name="agree_terms" id="id_agree_terms" required>
+            <label class="form-check-label text-muted small" for="id_agree_terms">
+                I agree to the <a href="#" class="teal-link">Terms of Service</a> and <a href="#" class="teal-link">Privacy Policy</a>.
+            </label>
+        </div>
+
+        <button type="submit" class="btn-teal">Register</button>
+    </form>
+
+    <p class="text-center text-muted small mt-4 mb-0">
+        Already have an account? <a href="{% url 'login_user' %}" class="teal-link">Log in</a>
+    </p>
+</div>
+
+<script>
+    function togglePassword(inputId, btn) {
+        const input = document.getElementById(inputId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            btn.textContent = 'Hide';
+        } else {
+            input.type = 'password';
+            btn.textContent = 'Show';
+        }
+    }
+</script>
+</body>
+</html>
