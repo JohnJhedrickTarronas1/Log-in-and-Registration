@@ -3,8 +3,10 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-pelec304-activity-secret-key-change-in-production'
-DEBUG = True
-ALLOWED_HOSTS = ['*']
+DEBUG = False
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+ALLOWED_HOSTS = ["jhed.pythonanywhere.com", "localhost", "127.0.0.1"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
